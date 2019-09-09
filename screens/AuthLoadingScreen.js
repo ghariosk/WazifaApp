@@ -1,9 +1,13 @@
 import React from 'react' 
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import Amplify, { Auth, Hub } from 'aws-amplify';
-import ActivityIndicatorExample from '../components/ActivityIndicatorExample'
+import ActivityIndicatorExample from '../components/ActivityIndicatorExample';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { getUser } from '../Actions/authActions';
 
-export default class AuthLoadingScreen extends React.Component {
+
+ class AuthLoadingScreen extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -15,6 +19,10 @@ export default class AuthLoadingScreen extends React.Component {
 	}
 
 	async componentDidMount () {
+		
+		await this.props.getUser()
+
+		console.log("Hello", this.props.user)
 		Auth.currentAuthenticatedUser()
 			.then(()=>{
 				Auth.currentUserInfo()
@@ -24,10 +32,10 @@ export default class AuthLoadingScreen extends React.Component {
 						if (res.attributes["custom:type"] == "Business") {
 						
 
-							this.props.navigation.navigate('Business')
+							// this.props.navigation.navigate('Business')
 						} else {
 	
-							this.props.navigation.navigate('Main')
+							// this.props.navigation.navigate('Main')
 						}
 					}).catch((err)=> {
 						alert(err)
@@ -51,7 +59,20 @@ export default class AuthLoadingScreen extends React.Component {
 
 	render () {
 		return (
-			<ActivityIndicatorExample/>
+			
+			<Text> {JSON.stringify(this.props.user)} </Text>
 		)
 	}
 }
+
+const mapStateToProps = (state) => ({
+	user: state,
+	loading: state.loading,
+	error: state.error
+})
+
+const mapDispatchToProps = (dispatch) => ({
+	getUser: () => dispatch(getUser())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen)

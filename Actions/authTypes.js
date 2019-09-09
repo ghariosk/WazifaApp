@@ -1,0 +1,5 @@
+export const GET_USER = 'GET_USER';
+export const GET_USER_FULLFILLED = 'GET_USER_FULLFILLED';
+export const GET_USER_REJECTED = 'GET_USER_REJECTED'
+
+

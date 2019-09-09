@@ -5,6 +5,8 @@ import ActivityIndicatorExample from '../components/ActivityIndicatorExample';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUser } from '../Actions/authActions';
+import registerForNotifications from '../Functions/registerForNotifications'
+import { Notifications } from 'expo';
 
 
  class AuthLoadingScreen extends React.Component {
@@ -27,15 +29,16 @@ import { getUser } from '../Actions/authActions';
 			.then(()=>{
 				Auth.currentUserInfo()
 					.then((res)=> {
-						console.log(res)
+						registerForNotifications()
+						this._notificationSubscription = Notifications.addListener(this._handleNotification);
 					
 						if (res.attributes["custom:type"] == "Business") {
 						
 
-							// this.props.navigation.navigate('Business')
+							this.props.navigation.navigate('Business')
 						} else {
 	
-							// this.props.navigation.navigate('Main')
+							this.props.navigation.navigate('Main')
 						}
 					}).catch((err)=> {
 						alert(err)
@@ -55,12 +58,15 @@ import { getUser } from '../Actions/authActions';
 
 	}
 
+	 _handleNotification = (notification) => {
+    	alert(notification)
+	  };
 
 
 	render () {
 		return (
 			
-			<Text> {JSON.stringify(this.props.user)} </Text>
+			<ActivityIndicatorExample/>
 		)
 	}
 }

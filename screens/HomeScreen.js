@@ -20,7 +20,7 @@ import awsmobile from '../aws-exports'
 
 import { MonoText } from '../components/StyledText';
 var {height, width} = Dimensions.get('window');
-
+ 
 export default class HomeScreen extends React.Component {
   constructor(props) {
     super(props)
@@ -72,11 +72,12 @@ export default class HomeScreen extends React.Component {
 
 const credentials = await Auth.currentCredentials();
 
+  console.log(credentials)
 
 
   var s3 = new AWS.S3({apiVersion: '2006-03-01', region:'eu-central-1', credentials:Auth.essentialCredentials(credentials)});
 
-
+  console.log(s3)
   // s3.listBuckets(function(err, data) {
   //   if (err) console.log(err, err.stack); // an error occurred
   //   else     console.log(data);           // successful response
@@ -133,12 +134,5 @@ const styles = StyleSheet.create({
 });
 
 
-const Tile = ({text}) => {
-  return (
-    <View style={styles.item}>
-      <Text>{text}</Text>
-      <Text> Hello </Text>
-    </View>
-  );
-}
+
 

@@ -1,0 +1,9 @@
+{
+    "auth": {
+        "wazifac46d8b61": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": []
+        }
+    }
+}

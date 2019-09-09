@@ -1,0 +1,25 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "wazifa-dev-20190819210729-authRole",
+            "UnauthRoleArn": "arn:aws:iam::509688276117:role/wazifa-dev-20190819210729-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::509688276117:role/wazifa-dev-20190819210729-authRole",
+            "Region": "eu-central-1",
+            "DeploymentBucketName": "wazifa-dev-20190819210729-deployment",
+            "UnauthRoleName": "wazifa-dev-20190819210729-unauthRole",
+            "StackName": "wazifa-dev-20190819210729",
+            "StackId": "arn:aws:cloudformation:eu-central-1:509688276117:stack/wazifa-dev-20190819210729/359aed60-c2ac-11e9-bd65-0a0ca1a48442"
+        },
+        "categories": {
+            "auth": {
+                "wazifac46d8b61": {
+                    "facebookAppIdUserPool": "925860234416813",
+                    "facebookAppSecretUserPool": "b7253e542d8422f4a1e5d7a575539892",
+                    "googleAppIdUserPool": "651990583030-rom475p6jluclnf93pd9m5ljl7mmd6r9.apps.googleusercontent.com",
+                    "googleAppSecretUserPool": "2ieal_uqfeLXc5Dg8ckBAbzc",
+                    "hostedUIProviderCreds": "[{\"ProviderName\":\"Facebook\",\"client_id\":\"925860234416813\",\"client_secret\":\"b7253e542d8422f4a1e5d7a575539892\"},{\"ProviderName\":\"Google\",\"client_id\":\"651990583030-rom475p6jluclnf93pd9m5ljl7mmd6r9.apps.googleusercontent.com\",\"client_secret\":\"2ieal_uqfeLXc5Dg8ckBAbzc\"}]"
+                }
+            }
+        }
+    }
+}

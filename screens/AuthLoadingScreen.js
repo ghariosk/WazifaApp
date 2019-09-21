@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUser } from '../Actions/authActions';
 import registerForNotifications from '../Functions/registerForNotifications'
+import updateWithIdentityPoolId from '../Functions/updateWithIdentityPoolId'
 import { Notifications } from 'expo';
 
 
@@ -21,21 +22,26 @@ import { Notifications } from 'expo';
 	}
 
 	async componentDidMount () {
-		
-		await this.props.getUser()
-
-		console.log("Hello", this.props.user)
+		// await this.props.getUser()
+		// this.props.navigation.navigate('Main')
 		Auth.currentAuthenticatedUser()
-			.then(()=>{
+			.then((res)=>{
+				console.log(res)
 				Auth.currentUserInfo()
 					.then((res)=> {
-						registerForNotifications()
-						this._notificationSubscription = Notifications.addListener(this._handleNotification);
-					
-						if (res.attributes["custom:type"] == "Business") {
-						
 
-							this.props.navigation.navigate('Business')
+
+						registerForNotifications()
+						updateWithIdentityPoolId()
+						this._notificationSubscription = Notifications.addListener(this._handleNotification);
+						// updateWithIdentityPoolId(res.attributes["custom:type"])
+						if (res.attributes["custom:type"] == "Business") {
+								
+								this.props.navigation.navigate('Business')
+
+
+
+							
 						} else {
 	
 							this.props.navigation.navigate('Main')
@@ -47,8 +53,8 @@ import { Notifications } from 'expo';
 			})
 			.catch((err) => {
 				console.log(err)
-				var user =  Auth.currentUserInfo()
-				console.log(user)
+			
+				
 				this.props.navigation.navigate('Auth')
 
 			})

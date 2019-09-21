@@ -6,18 +6,26 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ServicesScreen from '../screens/ServicesScreen'
+import JobsScreen from '../screens/JobsScreen'
+import JobScreen from '../screens/JobScreen'
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
 
-const HomeStack = createStackNavigator(
-  {
-    Home: HomeScreen,
+const HomeStack = createStackNavigator({
+  Home: {
+    screen: HomeScreen,
+    config
+
   },
-  config
-);
+  Services: {
+    screen: ServicesScreen
+  }
+
+});
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Home',
@@ -35,12 +43,16 @@ HomeStack.navigationOptions = {
 
 HomeStack.path = '';
 
-const LinksStack = createStackNavigator(
-  {
-    Links: LinksScreen,
+const LinksStack = createStackNavigator({
+  Jobs: {
+    screen: JobsScreen
+
+
   },
-  config
-);
+  Job: {
+    screen: JobScreen
+  }
+});
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'Links',

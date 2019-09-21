@@ -27,8 +27,11 @@ export default class SignUpScreen extends Component {
       username: email,
       password,
       attributes: { email,
-      	name: "Karl Gharios",
-        type: "User"
+        given_name: this.state.given_name,
+        family_name: this.state.family_name,
+
+      	name: `${this.state.given_name} ${this.state.family_name}`,
+        "custom:type": "User"
        }
         
       })

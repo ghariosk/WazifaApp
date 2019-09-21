@@ -11,13 +11,13 @@ export default class SignInScreen extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			message: this.props.navigation.getParam('message' ,  null),
+			message: this.props.navigation.getParam('message' , null),
 			isLoading: false,
 			transparent: 'transparent'
 
 
 		}
-		this.urlOpener = awsmobile.oauth.urlOpener.bind(this)
+		this._onAuthChange = this._onAuthChange.bind(this)
 
 	}
 
@@ -28,13 +28,13 @@ export default class SignInScreen extends Component {
     // If we are successful, navigate to Home screen
     	.then(response => {
     	console.log(response)
-    	 this.props.navigation.navigate('AuthLoading')
+    	 
     	})
     // On failure, display error in console
     	.catch(err => {
-    		alert(err.message)
+    		
     		this.setState({isLoading: false})
-    		console.log(err)
+    	
     	});
 	}
 
@@ -55,33 +55,24 @@ export default class SignInScreen extends Component {
 			 	break;
 		}
 	}
-
-
-	componentDidMount() {
-
-		    Hub.listen('auth',(data) => {
-		   console.log(data.payload.event)
+	_onAuthChange(data) {
+		console.log(data.payload.event)
         switch (data.payload.event) {
             case 'signIn':
                 this.setState({authState: 'signedIn', authData: data.payload.data});
 
-                        	Auth.currentUserInfo()
-            		.then((info)=> {
-						if (info.attributes["custom:type"] == "Business") {
-							if (info.attributes.phone_number_verified) {
-								this.props.navigation.navigate('AuthLoading')
-							} else {
-								alert('You have to wait to be screened to Sign In !')
-							}
-						} else {
-							this.props.navigation.navigate('AuthLoading')
-						}
-            		}).catch((err)=> {
-            			console.log(err)
-            		})
+                   this.props.navigation.navigate('AuthLoading')
                 break;
             case 'signIn_failure':
                 this.setState({authState: 'signIn', authData: null, authError: data.payload.data});
+          
+                const {code, message} = data.payload.data
+                if (code == "UserLambdaValidationException") {
+                	alert(message.split('error ')[1])
+                } else if (code == "UserNotFoundException") {
+                	alert("Wrong username or password")
+                }
+                // alert(err.message.split('error ')[1])
 
                 break;
             case 'codeFlow':
@@ -89,11 +80,16 @@ export default class SignInScreen extends Component {
             default:
                 break;
         }
-    });
+	}
+
+	componentDidMount() {
+	
+		    Hub.listen('auth', this._onAuthChange);
 	}
 
 	componentWillUnmount() {
 		AppState.removeEventListener('change', this._handleAppStateChange);
+		Hub.remove('auth', this._onAuthChange)
 	}
 
 	_handleAppStateChange = (nextAppState) => {
@@ -104,6 +100,8 @@ export default class SignInScreen extends Component {
 		if (!this.state.isLoading) {
 		return (
 			<View style={styles.container}>
+
+			 <Text> {this.props.navigation.getParam('message' , null)} </Text>
 			 
 
 				<View style={{flex: 1}}>
@@ -112,7 +110,7 @@ export default class SignInScreen extends Component {
 				<View style= {{flex: 3, width:"100%", alignItems: 'center'}}>
             	<Form style={styles.form}>
 	            	<Item stackedLabel>
-	            		<Label> Email </Label>
+	            		<Label> Username </Label>
 						<Input
 						  
 						  onChangeText={
@@ -192,7 +190,7 @@ export default class SignInScreen extends Component {
             	</Button>
             	</View>
 
-			 <Text> {this.state.message} </Text>
+			
 				
 
 			 </View>

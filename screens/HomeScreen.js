@@ -53,12 +53,14 @@ export default class HomeScreen extends React.Component {
          {
           id: 5,
           text: "Plumbing",
-          image: require('../assets/icons/icons8-plumbing-100.png')
+          image: require('../assets/icons/icons8-plumbing-100.png'),
+          subcategory: "Plumbing"
         },
          {
           id: 6,
           text: "Carpentry",
-          image: require('../assets/icons/icons8-saw-blade-100.png')
+          image: require('../assets/icons/icons8-saw-blade-100.png'),
+          subcategory: 'carpentry'
         }
 
       ]
@@ -72,12 +74,9 @@ export default class HomeScreen extends React.Component {
 
 const credentials = await Auth.currentCredentials();
 
-  console.log(credentials)
-
-
-  var s3 = new AWS.S3({apiVersion: '2006-03-01', region:'eu-central-1', credentials:Auth.essentialCredentials(credentials)});
-
-  console.log(s3)
+const essentials = await  Auth.essentialCredentials(credentials)
+console.log(essentials)
+   var s3 = new AWS.S3({apiVersion: '2006-03-01', region:'eu-central-1', credentials:Auth.essentialCredentials(credentials)});
   // s3.listBuckets(function(err, data) {
   //   if (err) console.log(err, err.stack); // an error occurred
   //   else     console.log(data);           // successful response

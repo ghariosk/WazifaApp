@@ -1,7 +1,5 @@
-// import {GET_USER,GET_USER_FULLFILLED, GET_USER_REJECTED} from './authTypes';
-export const GET_USER = 'GET_USER';
-export const GET_USER_FULLFILLED = 'GET_USER_FULLFILLED';
-export const GET_USER_REJECTED = 'GET_USER_REJECTED'
+import {GET_USER,GET_USER_FULLFILLED, GET_USER_REJECTED} from './authTypes';
+
 
 import {Auth} from 'aws-amplify'
 

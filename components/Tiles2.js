@@ -9,15 +9,15 @@ import { withNavigation } from 'react-navigation';
     const tiles = this.props.dataSource
     return (
       <View style={styles.container}>
-        {tiles.map((row) => Item({...tileDimensions, text:row.text, key:row.id, image:row.image, navigation: this.props.navigation}))}     
+        {tiles.map((row) => Item({...tileDimensions, text:row.text, key:row.id, image:row.image, navigation: this.props.navigation, type: row.subcategory}))}     
       </View>
     );
   }
 }
 
-const Item = ({size, margin, text, key, image, subcategory,navigation}) => (
+const Item = ({size, margin, text, key, image, type,navigation}) => (
   
-  <TouchableOpacity key={key} style={[styles.item, {width: size, height: size, marginHorizontal: margin}]} onPress={()=> navigation.navigate('Settings')}>
+  <TouchableOpacity key={key} style={[styles.item, {width: size, height: size, marginHorizontal: margin}]} onPress={()=> navigation.navigate('Services' , {type : type})}>
     <View style={[styles.image, {height:"100%", width: "100%", marginBottom:5}]}>
     <Image resizeMode='contain' source={image} style={{height: "70%", width: "70%"}}/>
     </View>

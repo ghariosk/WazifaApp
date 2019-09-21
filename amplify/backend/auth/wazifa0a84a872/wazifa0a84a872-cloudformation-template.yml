@@ -122,51 +122,6 @@ Parameters:
   authProvidersUserPool:
     Type: CommaDelimitedList
       
-  hostedUIProviderMeta:
-    Type: String
-                    
-  parentStack:
-    Type: String
-                
-  permissions:
-    Type: CommaDelimitedList
-              
-  dependsOn:
-    Type: CommaDelimitedList
-              
-  AllowedOAuthFlows:
-    Type: CommaDelimitedList
-              
-  AllowedOAuthScopes:
-    Type: CommaDelimitedList
-              
-  CallbackURLs:
-    Type: CommaDelimitedList
-              
-  LogoutURLs:
-    Type: CommaDelimitedList
-              
-  facebookAuthorizeScopes:
-    Type: CommaDelimitedList
-              
-  googleAuthorizeScopes:
-    Type: CommaDelimitedList
-      
-  updateFlow:
-    Type: String
-                
-  addCallbackOnUpdate:
-    Type: String
-              
-  addLogoutOnUpdate:
-    Type: String
-                    
-  EditURLS:
-    Type: CommaDelimitedList
-              
-  editLogoutURLs:
-    Type: CommaDelimitedList
-      
   facebookAppIdUserPool:
     Type: String
               
@@ -179,12 +134,24 @@ Parameters:
   googleAppSecretUserPool:
     Type: String
               
+  hostedUIProviderMeta:
+    Type: String
+              
   hostedUIProviderCreds:
     Type: String
               
   oAuthMetadata:
     Type: String
-            
+                    
+  parentStack:
+    Type: String
+                
+  permissions:
+    Type: CommaDelimitedList
+              
+  dependsOn:
+    Type: CommaDelimitedList
+    
 Conditions:
   ShouldNotCreateEnvResources: !Equals [ !Ref env, NONE ]
 
@@ -196,7 +163,7 @@ Resources:
   # Created to allow the UserPool SMS Config to publish via the Simple Notification Service during MFA Process
     Type: AWS::IAM::Role
     Properties:
-      RoleName: !If [ShouldNotCreateEnvResources, 'wazifac46d8b61_sns-role', !Join ['',['wazifac46d8b61_sns-role', '-', !Ref env]]]
+      RoleName: !If [ShouldNotCreateEnvResources, 'wazifa0a84a872_sns-role', !Join ['',['wazifa0a84a872_sns-role', '-', !Ref env]]]
       AssumeRolePolicyDocument: 
         Version: "2012-10-17"
         Statement: 
@@ -208,10 +175,10 @@ Resources:
               - "sts:AssumeRole"
             Condition: 
               StringEquals:
-                sts:ExternalId: wazifac46d8b61_role_external_id
+                sts:ExternalId: wazifa0a84a872_role_external_id
       Policies: 
         - 
-          PolicyName: wazifac46d8b61-sns-policy
+          PolicyName: wazifa0a84a872-sns-policy
           PolicyDocument: 
             Version: "2012-10-17"
             Statement: 
@@ -230,11 +197,6 @@ Resources:
       UserPoolName: !If [ShouldNotCreateEnvResources, !Ref userPoolName, !Join ['',[!Ref userPoolName, '-', !Ref env]]]
       
       Schema: 
-        
-        -
-          Name: email
-          Required: true
-          Mutable: true
         
         -
           Name: name
@@ -264,7 +226,7 @@ Resources:
       SmsVerificationMessage: !Ref smsVerificationMessage
       SmsConfiguration: 
         SnsCallerArn: !GetAtt SNSRole.Arn
-        ExternalId: wazifac46d8b61_role_external_id
+        ExternalId: wazifa0a84a872_role_external_id
     
   
     
@@ -283,7 +245,7 @@ Resources:
   # Depends on UserPool for ID reference
     Type: "AWS::Cognito::UserPoolClient"
     Properties:
-      ClientName: wazifac46d8b61_app_clientWeb
+      ClientName: wazifa0a84a872_app_clientWeb
       
       RefreshTokenValidity: !Ref userpoolClientRefreshTokenValidity
       UserPoolId: !Ref UserPool
@@ -358,7 +320,7 @@ Resources:
   # Marked as depending on UserPoolClientRole for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: wazifac46d8b61_userpoolclient_lambda_iam_policy
+      PolicyName: wazifa0a84a872_userpoolclient_lambda_iam_policy
       Roles: 
         - !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',[!Ref userpoolClientLambdaRole, '-', !Ref env]]]
       PolicyDocument:
@@ -375,7 +337,7 @@ Resources:
   # Marked as depending on UserPoolClientLambdaPolicy for easier to understand CFN sequencing
     Type: 'AWS::IAM::Policy'
     Properties:
-      PolicyName: wazifac46d8b61_userpoolclient_lambda_log_policy
+      PolicyName: wazifa0a84a872_userpoolclient_lambda_log_policy
       Roles: 
         - !If [ShouldNotCreateEnvResources, !Ref userpoolClientLambdaRole, !Join ['',[!Ref userpoolClientLambdaRole, '-', !Ref env]]]
       PolicyDocument:
@@ -762,7 +724,7 @@ Resources:
   # Always created
     Type: AWS::Cognito::IdentityPool
     Properties: 
-      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'wazifac46d8b61_identitypool_c46d8b61', !Join ['',['wazifac46d8b61_identitypool_c46d8b61', '__', !Ref env]]]
+      IdentityPoolName: !If [ShouldNotCreateEnvResources, 'wazifa0a84a872_identitypool_0a84a872', !Join ['',['wazifa0a84a872_identitypool_0a84a872', '__', !Ref env]]]
       
       CognitoIdentityProviders:
         - ClientId:  !Ref UserPoolClient

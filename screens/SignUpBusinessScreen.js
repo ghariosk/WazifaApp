@@ -10,7 +10,7 @@ export default class SignUpScreen extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			 email: 'karlgharios@hotmail.com',
+			 email: null,
       	password: 'jesuisla45',
       	confirmPassword: 'jesuisla45',
       	confirmModalVisible: false,
@@ -27,14 +27,11 @@ export default class SignUpScreen extends Component {
   // Make sure passwords match
   if (password === confirmPassword) {
     Auth.signUp({
-      username: email,
+      username: phone_number,
       password,
-      attributes: { 
-        email,
+      attributes: {
         name,
         "custom:type": "Business",
-        phone_number: phone_number,
-        "custom:screened": "False"
        }
         
       })
@@ -64,13 +61,15 @@ handleSignIn = () => {
 }
 
   handleConfirmationCode = (signInAfter) => {
-  const { email, confirmationCode } = this.state;
-  Auth.confirmSignUp(email, confirmationCode, {})
+  const { phone_number, confirmationCode } = this.state;
+  Auth.confirmSignUp(phone_number, confirmationCode, {})
     .then((user) => {
       console.log(user)
-      signInAfter()
+      // signInAfter()
       this.setState({ confirmModalVisible: false });
-      this.setState({verifyModalVisible: true})
+      // this.setState({verifyModalVisible: true})
+       this.props.navigation.navigate('signIn', {message: "You registration is successful. \n We will be in contact shortly! "})
+
       // 
       
       
@@ -78,20 +77,20 @@ handleSignIn = () => {
     .catch(err => console.log(err));
   }
 
-  handleVerification = () => {
-    const {email, phone_number_code} = this.state 
-    Auth.verifyCurrentUserAttributeSubmit('phone_number',phone_number_code)
-    .then(() => {
-      this.setState({verifyModalVisible: false})
-      Auth.signOut()
-        .then(()=> {
-          this.props.navigation.navigate('signIn', {message: "You registration is successful. \n We will be in contact shortly! "})
-        })
-        .catch((err)=> console.log(err))
+  // handleVerification = () => {
+  //   const {email, phone_number_code} = this.state 
+  //   Auth.verifyCurrentUserAttributeSubmit('phone_number',phone_number_code)
+  //   .then(() => {
+  //     this.setState({verifyModalVisible: false})
+  //     Auth.signOut()
+  //       .then(()=> {
+  //        
+  //       })
+  //       .catch((err)=> console.log(err))
       
-    })
-    .catch(err => console.log(err))
-  }
+  //   })
+  //   .catch(err => console.log(err))
+  // }
 
 	componentDidMount() {
 		console.log('Sign Up Screen')
@@ -100,16 +99,7 @@ handleSignIn = () => {
 	render() {
 		return (
 			 <ScrollView contentContainerStyle={styles.container}>
-        <Text>Welcome to MyAlligatorFace!</Text>
-        <Input
-          label="Email"
-          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
-          onChangeText={
-            // Set this.state.email to the value in this Input box
-            (value) => this.setState({ email: value })
-          }
-          placeholder="my@email.com"
-        />
+      
          <Input
           label="Name"
           onChangeText={
@@ -126,7 +116,16 @@ handleSignIn = () => {
             (value) => this.setState({ phone_number: value })
           }
           keyboardShouldPersistTaps='handled'
-          placeholder="Karim Hatem"
+          placeholder="Your name"
+        />
+          <Input
+          label="Email (Optional)"
+          leftIcon={{ type: 'font-awesome', name: 'envelope' }}
+          onChangeText={
+            // Set this.state.email to the value in this Input box
+            (value) => this.setState({ email: value })
+          }
+          placeholder="my@email.com"
         />
         <Input
           label="Password"
@@ -135,7 +134,6 @@ handleSignIn = () => {
             // Set this.state.password to the value in this Input box
             (value) => this.setState({ password: value })
           }
-          placeholder="p@ssw0rd123"
           secureTextEntry
         />
         <Input
@@ -169,30 +167,14 @@ handleSignIn = () => {
             />
             <Button
             title='Submit'
-            onPress={() => this.handleConfirmationCode(this.handleSignIn) }
+            onPress={() => this.handleConfirmationCode() }
             />
           </View>
         </Modal>
-        <Modal
-        visible={this.state.verifyModalVisible}
-        >
-            <View
-            style={styles.container}
-            >
-            <Input
-            label="Phone Number Verification Code"
-            leftIcon={{ type: 'font-awesome', name: 'lock' }}
-            onChangeText={
-            // Set this.state.confirmationCode to the value in this Input box
-            (value) => this.setState({ phone_number_code: value })
-            }
-            />
-            <Button
-            title='Submit'
-            onPress={() => this.handleVerification() }
-            />
-          </View>
-        </Modal>
+        <Button 
+          title="Go back" 
+          onPress={() =>this.props.navigation.navigate('signIn', {message: "You registration is successful. \n We will be in contact shortly! "}) }/>
+  
         <Text> {this.props.navigation.getParam('message' ,  null)} </Text>
       </ScrollView>
 		)

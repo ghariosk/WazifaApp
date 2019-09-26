@@ -2,6 +2,7 @@
 import {Auth} from 'aws-amplify'
 import AWS from 'aws-sdk'
 
+
 export default updateWithIdentityPoolId = async (custom_type) => {
 	var info = await Auth.currentUserInfo()
 

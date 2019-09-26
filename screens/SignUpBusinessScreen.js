@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import {View, StyleSheet, Text, ScrollView, SafeAreaView, StatusBar , Modal} from 'react-native';
+import {Platform,Keyboard, KeyboardAvoidingView, View, StyleSheet, Text, ScrollView, SafeAreaView, StatusBar , Modal} from 'react-native';
 import { default as awsConfig } from "../aws-exports";
 import Amplify, { Auth, Hub } from 'aws-amplify';
 import { Input, Button } from "react-native-elements";
-
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import Demo from '../components/Demo'
 Amplify.configure(awsConfig);
 
 export default class SignUpScreen extends Component {
@@ -16,7 +17,7 @@ export default class SignUpScreen extends Component {
       	confirmModalVisible: false,
         verifyModalVisible: false,
         name: 'Karl G',
-        phone_number: '+9613244575'
+        phone_number: '+9613795112',
 
 		}
 	}
@@ -24,17 +25,39 @@ export default class SignUpScreen extends Component {
 	handleSignUp = () => {
   // alert(JSON.stringify(this.state));
   const { email, password, confirmPassword, phone_number, name } = this.state;
+  var params
   // Make sure passwords match
   if (password === confirmPassword) {
-    Auth.signUp({
-      username: phone_number,
-      password,
-      attributes: {
-        name,
-        "custom:type": "Business",
-       }
-        
-      })
+
+    if (!email || typeof(email) == "undefined" ) {
+
+      params = {
+        username: phone_number,
+        password,
+        attributes: {
+          name,
+          "custom:type": "Business"
+         
+        }
+      }
+          
+    } else if (email) {
+
+       params = {
+        username: "karlito",
+        phone_number: phone_number,
+        password,
+        attributes: {
+          name,
+          "custom:type": "Business",
+          "email": email
+         
+      }
+
+    }
+  }
+
+    Auth.signUp(params)
       // On success, show Confirmation Code Modal
       .then(() => this.setState({ confirmModalVisible: true }))
       // On failure, display error in console
@@ -94,14 +117,45 @@ handleSignIn = () => {
 
 	componentDidMount() {
 		console.log('Sign Up Screen')
+
 	}
 
+  componentWillUnmount() {
+
+  }
 	render() {
 		return (
-			 <ScrollView contentContainerStyle={styles.container}>
-      
+     
+        
+  
+      <KeyboardAwareScrollView
+      resetScrollToCoords={{ x: 0, y: 0 }}
+      scrollEnabled={false}
+      contentContainerStyle={styles.container2}>
+           <Modal
+        visible={this.state.confirmModalVisible}
+        >
+            <View
+            style={styles.container}
+            >
+            <Input
+            label="Confirmation Code"
+            leftIcon={{ type: 'font-awesome', name: 'lock' }}
+            onChangeText={
+            // Set this.state.confirmationCode to the value in this Input box
+            (value) => this.setState({ confirmationCode: value })
+            }
+            />
+            <Button
+            title='Submit'
+            onPress={() => this.handleConfirmationCode() }
+            />
+          </View>
+        </Modal>
+    
+        
          <Input
-          label="Name"
+              label="Name"
           onChangeText={
             // Set this.state.email to the value in this Input box
             (value) => this.setState({ name: value })
@@ -125,7 +179,6 @@ handleSignIn = () => {
             // Set this.state.email to the value in this Input box
             (value) => this.setState({ email: value })
           }
-          placeholder="my@email.com"
         />
         <Input
           label="Password"
@@ -143,7 +196,6 @@ handleSignIn = () => {
             // Set this.state.confirmPassword to the value in this Input box
             (value) => this.setState({ confirmPassword: value })
           }
-          placeholder="p@ssw0rd123"
           secureTextEntry
         />
         <Button
@@ -151,32 +203,17 @@ handleSignIn = () => {
           onPress={ this.handleSignUp }
         />
 
-        <Modal
-        visible={this.state.confirmModalVisible}
-        >
-            <View
-            style={styles.container}
-            >
-            <Input
-            label="Confirmation Code"
-            leftIcon={{ type: 'font-awesome', name: 'lock' }}
-            onChangeText={
-            // Set this.state.confirmationCode to the value in this Input box
-            (value) => this.setState({ confirmationCode: value })
-            }
-            />
-            <Button
-            title='Submit'
-            onPress={() => this.handleConfirmationCode() }
-            />
-          </View>
-        </Modal>
+ 
         <Button 
           title="Go back" 
           onPress={() =>this.props.navigation.navigate('signIn', {message: "You registration is successful. \n We will be in contact shortly! "}) }/>
-  
-        <Text> {this.props.navigation.getParam('message' ,  null)} </Text>
-      </ScrollView>
+
+
+      </KeyboardAwareScrollView>
+          
+
+     
+
 		)
 	}
 }
@@ -184,8 +221,23 @@ handleSignIn = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
+  },
+  container2: {
+  flex:1,
+  justifyContent: 'center',
+  alignItems: 'center'
+
+  },
+  shadow: {
+    flex: 1,
+   shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  shadowRadius: 3.84,
+  elevation: 5,
   }
 });

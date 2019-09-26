@@ -4,7 +4,7 @@ import {
 	Image
 	
 } from 'react-native'
-import {StatusBar, Picker,  Switch} from 'react-native'
+import {Modal, StatusBar, Picker,  Switch} from 'react-native'
 import RNPickerSelect from 'react-native-picker-select';
 var moment = require('moment');
 import DurationPicker from '../components/react-native-modal-duration-picker'
@@ -13,10 +13,12 @@ import {View, Button,Text, Container, Header, Content, Item, Input, Icon } from 
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
-import { Auth, Storage } from 'aws-amplify';
-
-
-export default class ServicesScreen extends React.Component {
+import { Auth, Storage } from 'aws-amplify';import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import ActivityIndicatorExample from '../components/ActivityIndicatorExample';
+import { getJobs } from '../Actions/jobsActions'
+import { ImageBrowser } from 'expo-multiple-media-imagepicker'
+class ServicesScreen extends React.Component {
 	constructor(props) {
 		super(props)
 
@@ -50,7 +52,9 @@ export default class ServicesScreen extends React.Component {
 			hours: "02",
 			isDurationPickerVisible: false,
 			now: true,
-			image: null
+			image: null,
+			photos: [],
+			imagePickerVisible: true
 
 
 		}
@@ -163,7 +167,20 @@ export default class ServicesScreen extends React.Component {
 
         console.log(content);
 
-        this.uploadToStorage(content.body, this.state.image)
+        var caca = await this.uploadToStorage(content.body, this.state.image)
+       	
+
+
+       
+
+        console.log(caca)
+        await this.props.getJobs()
+
+
+
+        this.props.navigation.navigate('Jobs')
+
+
 
        
 	}
@@ -174,18 +191,33 @@ export default class ServicesScreen extends React.Component {
 
 		const blob = await response.blob()
 
-		Storage.put(`${id}/1.jpeg`, blob, {
-		contentType: 'image/jpeg',
-		level: 'protected'
+		var test = await Storage.put(`${id}/1.jpeg`, blob, {
+			contentType: 'image/jpeg',
+			level: 'test',
+			customPrefix:  {'test': 'test'},
+
 		})
+		console.log(test)
 		} catch (err) {
-		console.log(err)
+			console.log(err)
 		}
-		}
+	}
 
 	showDurationModal = () => {
 		this.setState({isDurationPickerVisible: true})
 	}
+
+	 imageBrowserCallback = (callback) => {
+    callback.then((photos) => {
+      console.log(photos)
+      this.setState({
+        imagePickerVisible: false,
+        photos
+      })
+
+      console.log(this.state.photos)
+    }).catch((e) => console.log(e))
+  }
 	
 
 	
@@ -211,6 +243,8 @@ export default class ServicesScreen extends React.Component {
 				return null
 			}
 		}
+
+		if (!this.props.loading) {
 		return (
 			<View style={styles.container}>
 			<StatusBar/>
@@ -291,7 +325,7 @@ export default class ServicesScreen extends React.Component {
 				</View>
 
 
-				<Button onPress={() => this.uploadToStorage(this.state.image)}> 
+				<Button onPress={() => this.uploadToStorage(1,this.state.image)}> 
 					<Text> 
 						Upload to S3
 					</Text>
@@ -312,10 +346,44 @@ export default class ServicesScreen extends React.Component {
 				<Button rounded onPress={this.handleSubmit}>
 					<Text>Submit</Text>
 				</Button>
+				<Modal visible={this.state.imagePickerVisible}>
+
+				       <ImageBrowser
+        max={101} // Maximum number of pickable image. default is None
+        headerCloseText={'Cancel'} // Close button text on header. default is 'Close'.
+        headerDoneText={'Done'} // Done button text on header. default is 'Done'.
+        headerButtonColor={'#E31676'} // Button color on header.
+       // Word when picking.  default is 'n selected'.
+     // Only iOS, Filter by MediaSubtype. default is display all.
+        badgeColor={'blue'} // Badge color when picking.
+        emptyText={'Empty'} // Empty Text
+        callback={this.imageBrowserCallback} // Callback functinon on press Done or Cancel Button. Argument is Asset Infomartion of the picked images wrapping by the Promise.
+          />
+          </Modal>
+
 			</View>
 		)
+		} else if (this.props.loading) {
+			return (
+			<View>
+			<ActivityIndicatorExample/>
+			<Text style={{textAlign:'center'}}> Requesting your service </Text>
+			</View>
+			)
+		}
 	}
 }
+
+const mapStateToProps = (state) => ({
+	loading: state.jobs.loading
+})
+
+
+const mapDispatchToProps = (dispatch) => ({
+	getJobs: () => dispatch(getJobs())
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(ServicesScreen)
 
 
 

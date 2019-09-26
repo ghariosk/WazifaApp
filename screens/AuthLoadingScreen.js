@@ -5,6 +5,7 @@ import ActivityIndicatorExample from '../components/ActivityIndicatorExample';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getUser } from '../Actions/authActions';
+import { getJobs } from '../Actions/jobsActions'
 import registerForNotifications from '../Functions/registerForNotifications'
 import updateWithIdentityPoolId from '../Functions/updateWithIdentityPoolId'
 import { Notifications } from 'expo';
@@ -22,7 +23,8 @@ import { Notifications } from 'expo';
 	}
 
 	async componentDidMount () {
-		// await this.props.getUser()
+		
+		
 		// this.props.navigation.navigate('Main')
 		Auth.currentAuthenticatedUser()
 			.then((res)=>{
@@ -30,7 +32,7 @@ import { Notifications } from 'expo';
 				Auth.currentUserInfo()
 					.then((res)=> {
 
-
+						this.props.getJobs()
 						registerForNotifications()
 						updateWithIdentityPoolId()
 						this._notificationSubscription = Notifications.addListener(this._handleNotification);
@@ -73,18 +75,22 @@ import { Notifications } from 'expo';
 		return (
 			
 			<ActivityIndicatorExample/>
+
+			
 		)
 	}
 }
 
 const mapStateToProps = (state) => ({
-	user: state,
-	loading: state.loading,
-	error: state.error
+	user: state.auth.user,
+	loading: state.auth.loading,
+	error: state.auth.error,
+	jobs: state.jobs
 })
 
 const mapDispatchToProps = (dispatch) => ({
-	getUser: () => dispatch(getUser())
+	getUser: () => dispatch(getUser()),
+	getJobs: () => dispatch(getJobs())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthLoadingScreen)

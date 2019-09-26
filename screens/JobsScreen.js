@@ -7,9 +7,12 @@ import {
 import {Body, Container, Header, Content, List, ListItem, Text, Left, Right, Icon, Thumbnail } from 'native-base';
 import {Auth} from 'aws-amplify'
 import allIcons from '../assets/icons/allIcons'
+import { getJobs } from '../Actions/jobsActions'
+import ActivityIndicatorExample from '../components/ActivityIndicatorExample';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-
-export default class JobsScreen extends Component {
+class JobsScreen extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
@@ -19,28 +22,6 @@ export default class JobsScreen extends Component {
 	}
 
 	async componentDidMount() {
-		let jwt
-		await Auth.currentSession().then(res=>{
-		let idToken = res.idToken
-		jwt = idToken.getJwtToken()
-		}).catch((err) => console.log(err))
-
-		console.log(jwt)
-
-		const rawResponse = await fetch('https://urbj1ulno3.execute-api.us-east-1.amazonaws.com/Dev/listJobs', {
-			headers: {
-				'Accept': 'application/json',
-				'authorizationToken': jwt
-			}
-		})
-
-		const data = await rawResponse.json()
-
-		this.setState({jobs:data.results})
-		this.setState({isLoading: false})
-
-		console.log(data)
-
 
 	}
 
@@ -57,16 +38,17 @@ export default class JobsScreen extends Component {
 
 
 
+
 	render () {
 		return (
 			<Container>
 			<Content>
 			<List>
-			{this.state.isLoading?
-				null
+			{this.props.loading?
+				<ActivityIndicatorExample/>
 				 :
-				 this.state.jobs.map((row)=> 
-				 	Item({data: row, key: row.idjobs, require_picture: this.Test, navigation: this.props.navigation, category: row.category, subcategory: row.subcategory, schedule_date: row.schedule_date})
+				 this.props.jobs.map((row)=> 
+				 	Item({ key: row.idjobs, require_picture: this.Test, navigation: this.props.navigation, category: row.category, subcategory: row.subcategory, schedule_date: row.schedule_date})
 				 )
 			}
 			</List>
@@ -79,9 +61,9 @@ export default class JobsScreen extends Component {
 }
 
 var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: "numeric", minute:"2-digit" };
-const Item = ({data, key, require_picture, category,subcategory,schedule_date,navigation}) => (
+const Item = ({ key, require_picture, category,subcategory,schedule_date,navigation}) => (
  	
-	 <ListItem button onPress={() => navigation.navigate('Job' , {data: data} )}  large key={key} avatar>
+	 <ListItem button onPress={() => navigation.navigate('Job' , {id: key} )}  large key={key} avatar>
 	
               <Left>
                 <Thumbnail small square source={allIcons.Plumbing}/>
@@ -99,6 +81,19 @@ const Item = ({data, key, require_picture, category,subcategory,schedule_date,na
 
 
 )
+
+const mapStateToProps = (state) => ({
+	jobs: state.jobs.jobs,
+	loading: state.jobs.loading,
+	error: state.jobs.errorMessage
+})
+
+const mapDispatchToProps = (dispatch) => ({
+	getJobs: () => dispatch(getJobs())
+})
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(JobsScreen)
 
 
 

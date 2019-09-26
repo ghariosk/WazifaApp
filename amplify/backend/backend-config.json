@@ -1,15 +1,15 @@
 {
-	"auth": {
-		"wazifa0a84a872": {
-			"service": "Cognito",
-			"providerPlugin": "awscloudformation",
-			"dependsOn": []
-		}
-	},
-	"storage": {
-		"wazifas3": {
-			"service": "S3",
-			"providerPlugin": "awscloudformation"
-		}
-	}
+    "auth": {
+        "wazifa0a84a872": {
+            "service": "Cognito",
+            "providerPlugin": "awscloudformation",
+            "dependsOn": []
+        }
+    },
+    "storage": {
+        "wazifas3": {
+            "service": "S3",
+            "providerPlugin": "awscloudformation"
+        }
+    }
 }

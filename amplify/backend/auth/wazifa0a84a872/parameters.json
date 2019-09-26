@@ -65,20 +65,47 @@
     "triggers": "{}",
     "hostedUIDomainName": "wazifa-auth",
     "newCallbackURLs": [
-        "exp://10.0.2.59:19000/"
+        "exp://192.168.65.142:19000/"
     ],
     "newLogoutURLs": [
-        "exp://10.0.2.59:19000/"
+        "exp://192.168.65.142:19000/"
     ],
     "authProvidersUserPool": [
         "Facebook",
         "Google"
     ],
     "hostedUIProviderMeta": "[{\"ProviderName\":\"Facebook\",\"authorize_scopes\":\"public_profile\",\"AttributeMapping\":{\"name\":\"name\",\"username\":\"id\"}},{\"ProviderName\":\"Google\",\"authorize_scopes\":\"openid profile\",\"AttributeMapping\":{\"name\":\"name\",\"username\":\"sub\"}}]",
-    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://10.0.2.59:19000/\"],\"LogoutURLs\":[\"exp://10.0.2.59:19000/\"]}",
     "parentStack": {
         "Ref": "AWS::StackId"
     },
     "permissions": [],
-    "dependsOn": []
+    "dependsOn": [],
+    "AllowedOAuthFlows": [
+        "code"
+    ],
+    "AllowedOAuthScopes": [
+        "phone",
+        "email",
+        "openid",
+        "profile",
+        "aws.cognito.signin.user.admin"
+    ],
+    "CallbackURLs": [
+        "exp://10.0.2.59:19000/"
+    ],
+    "LogoutURLs": [
+        "exp://10.0.2.59:19000/"
+    ],
+    "facebookAuthorizeScopes": [
+        "public_profile"
+    ],
+    "googleAuthorizeScopes": [
+        "openid profile"
+    ],
+    "updateFlow": "callbacks",
+    "EditURLS": [],
+    "addCallbackOnUpdate": true,
+    "editLogoutURLs": [],
+    "addLogoutOnUpdate": true,
+    "oAuthMetadata": "{\"AllowedOAuthFlows\":[\"code\"],\"AllowedOAuthScopes\":[\"phone\",\"email\",\"openid\",\"profile\",\"aws.cognito.signin.user.admin\"],\"CallbackURLs\":[\"exp://10.0.2.59:19000/\",\"exp://192.168.65.142:19000/\"],\"LogoutURLs\":[\"exp://10.0.2.59:19000/\",\"exp://192.168.65.142:19000/\"]}"
 }

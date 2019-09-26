@@ -1,11 +1,11 @@
 import { combineReducers, applyMiddleware, createStore, compose } from 'redux';
 import thunk from 'redux-thunk';
-
-import authReducer from './authReducer'
+import {authReducer,jobsReducer} from './authReducer'
 
 
 const AppReducers = combineReducers({
 	auth: authReducer,
+	jobs: jobsReducer
 })
 
 const rootReducer = (state, action) => {

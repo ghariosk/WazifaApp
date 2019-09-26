@@ -77,10 +77,15 @@ const credentials = await Auth.currentCredentials();
 const essentials = await  Auth.essentialCredentials(credentials)
 console.log(essentials)
    var s3 = new AWS.S3({apiVersion: '2006-03-01', region:'eu-central-1', credentials:Auth.essentialCredentials(credentials)});
+
   // s3.listBuckets(function(err, data) {
   //   if (err) console.log(err, err.stack); // an error occurred
   //   else     console.log(data);           // successful response
   // });
+
+  var params = {Bucket: 'wazifas3bucket-dev', Key: 'public/1/1.jpeg'};
+  var url = s3.getSignedUrl('getObject', params);
+  console.log('The URL is', url);
   
 
 

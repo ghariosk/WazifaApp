@@ -13,6 +13,13 @@ const JOBS_STATE = {
 	loading: true,
 	errorMessage: ''
 }
+
+const LOCATIONS_STATE = {
+	locations: [],
+	loading: true,
+	errorMessage: ''
+}
+
 const GET_USER = 'GET_USER';
 const GET_USER_FULLFILLED = 'GET_USER_FULLFILLED';
 const GET_USER_REJECTED = 'GET_USER_REJECTED'
@@ -25,6 +32,11 @@ const GET_JOBS_REJECTED = "GET_JOBS_REJECTED"
 const ADD_NEW_JOB_REQUEST = 'ADD_NEW_JOB_REQUEST';
 const ADD_NEW_JOB_REQUEST_FULLFILLED = 'ADD_NEW_JOB_REQUEST_FULLFILLED';
 const ADD_NEW_JOB_REQUEST_REJECTED = 'ADD_NEW_JOB_REQUEST_REJECTED'
+
+
+const GET_LOCATIONS = 'GET_LOCATIONS',
+const GET_LOCATIONS_FULFILLED = 'GET_LOCATIONS_FULFILLED',
+const GET_LOCATIONS_REJECTED = 'GET_LOCATIONS_REJECTED'
 
 
 export const authReducer =  (state = AUTH_STATE, action) => {
@@ -61,6 +73,22 @@ export const jobsReducer= (state = JOBS_STATE, action) => {
 		default:
 			return state
 	}
+}
+
+export const locationsReducer (state= LOCATIONS_STATE, action ) => {
+
+	switch (action.type) {
+		case  GET_LOCATIONS:
+			return {...state, loading: action.payload};
+		case GET_LOCATIONS_FULFILLED:
+			return {...state, locations: action.payload, loading: false};
+		case GET_LOCATIONS_REJECTED:
+			return {...state, errorMessage: action.payload};
+
+		default:
+			return state
+	}
+
 }
 
 

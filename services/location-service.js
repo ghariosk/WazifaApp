@@ -1,6 +1,7 @@
 import Geocoder from 'react-native-geocoding';
+import {googleAPIKey} from '../constants/Google'
 
-Geocoder.init("AIzaSyCk2p4uNqQiUV2oi0Ll3xfGO42e6Ry4WSI");
+Geocoder.init(googleAPIKey);
 
 export const getLocation = () => {
     return new Promise(

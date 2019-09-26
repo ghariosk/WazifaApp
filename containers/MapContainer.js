@@ -92,7 +92,7 @@ class MapContainer extends React.Component {
                    this.state.region['latitude']?
                         <View style={{ flex: 1 }}>
                             <MyMapView
-                                onConfirm={(coords) => this.props.onConfirm(this.state.region)}
+                                onConfirm={() => this.props.onConfirm(this.state.region)}
                                 region={this.state.region}
                                 onRegionChange={(reg) => this.onMapRegionChange(reg)} 
                                 onPressSearch={() => this.setState({isLocationSearchVisible: true})}/>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+import {googleAPIKey} from '../constants/Google'
+
 
 class MapInput extends React.Component {
 
@@ -19,7 +21,7 @@ class MapInput extends React.Component {
                 }
 
                 query={{
-                    key: 'AIzaSyCk2p4uNqQiUV2oi0Ll3xfGO42e6Ry4WSI',
+                    key: googleAPIKey,
                     language: 'en'
                 }}
 
